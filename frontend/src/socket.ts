@@ -1,5 +1,5 @@
 import { io, Socket } from "socket.io-client";
 
-const URL = "http://localhost:8080";
+const URL = "https://rtc-chat-8flp.onrender.com/";
 
 export const socket: Socket = io(URL);
