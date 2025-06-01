@@ -36,57 +36,84 @@ export default function HomeScreen({ socket }: { socket: Socket }) {
 
 
   return (
-    <div>
-      <div className=" h-screen flex flex-col mt-24 mx-auto gap-4 items-start">
-        <div className="font-semibold text-2xl">Join the Chat.</div>
+  <div className="h-screen flex items-center justify-center">
+    <div className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
+      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
+        Join the Chat
+      </h1>
+
+      {/* Username input */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Your Username
+        </label>
         <input
           type="text"
-          placeholder="your username..."
           value={usernameInput}
           onChange={(e) => setUsernameInput(e.target.value)}
-          className="px-2 py-0.5 bg-amber-300 rounded-md"
+          placeholder="e.g. yash_01"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md bg-amber-100 focus:outline-none focus:ring focus:border-blue-300"
         />
-        <div className="my-12">
-          <div className="font-medium mb-2">Join an existing room</div>
-          <div className="flex gap-4">
-            <input
-              type="text"
-              value={room}
-              onChange={(e) => setRoom(e.target.value)}
-              placeholder="enter room code..."
-              className="px-2 py-0.5 bg-orange-300 rounded-md"
-            />
-            <button className="bg-black text-white py-0.5 rounded-md cursor-pointer hover:bg-gray-300 hover:text-black transition ease-in-out px-2" onClick={() => handleJoin(room, true)}>
-              Join room
-            </button>
-          </div>
+      </div>
+
+      {/* Join Room */}
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Join an Existing Room
+        </label>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={room}
+            onChange={(e) => setRoom(e.target.value)}
+            placeholder="Enter room code"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-orange-100 focus:outline-none focus:ring focus:border-blue-300"
+          />
+          <button
+            onClick={() => handleJoin(room, true)}
+            className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
+          >
+            Join
+          </button>
         </div>
-        <div>
-          <div className="font-medium mb-2">Create a new room</div>
-          <div className="flex gap-2 items-center">
-            <button
-              className="px-2 py-0.5 bg-pink-300 rounded-md cursor-pointer hover:bg-pink-500 hover:text-white transition ease-in-out"
-              onClick={() => {
-                setShowNewRoom(true);
-                socket.emit("generateRoom", {});
-              }}
-            >
-              Generate
-            </button>
-            {showNewRoom && (
-              <div className="text-sm">
-                Created room <span className="font-bold">{newRoom}</span>.
-              </div>
-            )}
-            <button
-              className="bg-black text-white px-2 py-0.5 rounded-md cursor-pointer hover:bg-gray-300 hover:text-black transition ease-in-out"
-              onClick={() => {handleJoin(newRoom, false)}}
-            >
-              Go to room
-            </button>
-          </div>
+      </div>
+
+      {/* Create New Room */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Create a New Room
+        </label>
+        <div className="flex gap-2 items-center">
+          <button
+            onClick={() => {
+              setShowNewRoom(true);
+              socket.emit("generateRoom", {});
+            }}
+            className="px-4 py-2 bg-pink-400 text-white rounded-md hover:bg-pink-500 transition"
+          >
+            Generate
+          </button>
+
+          {showNewRoom && (
+            <div className="text-sm font-mono text-gray-700">
+              {newRoom && (
+                <>
+                  Created Room: <span className="font-bold">{newRoom}</span>
+                </>
+              )}
+            </div>
+          )}
+
+          <button
+            onClick={() => handleJoin(newRoom, false)}
+            className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
+          >
+            Go
+          </button>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
+
 }

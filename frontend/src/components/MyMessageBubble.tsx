@@ -1,8 +1,17 @@
-export default function MyMessageBubble({msg, index}: {msg:string, index:number}) {
+export default function MyMessageBubble({
+  msg,
+}: {
+  msg: string;
+  index: number;
+}) {
   return (
-    <div key={index} className='flex flex-col bg-green-300 text-white items-end m-4 px-2 pl-4 rounded-md w-fit ml-auto'>
-        <div className='text-green-900 font-extrabold text-sm'>Me</div>
-        <div className='text-black font-bold'>{msg}</div>
+    <div className="flex justify-end pr-4">
+      <div className="bg-green-500 text-white rounded-xl rounded-br-none px-4 py-2 max-w-xs sm:max-w-md shadow-md">
+        <div className="text-xs text-white/80 font-semibold mb-1 text-right">
+          Me
+        </div>
+        <div className="text-sm font-medium break-words">{msg}</div>
+      </div>
     </div>
-  )
+  );
 }

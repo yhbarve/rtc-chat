@@ -1,7 +1,14 @@
-export default function SystemMessage({msg, index}: {msg: string, index: number}) {
+export default function SystemMessage({
+  msg,
+}: {
+  msg: string;
+  index: number;
+}) {
   return (
-    <div key={index} className='text-center font-bold text-sm text-red-700'>
-        ** {msg} **
+    <div className="text-center my-2">
+      <span className="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+        {msg}
+      </span>
     </div>
-  )
+  );
 }
