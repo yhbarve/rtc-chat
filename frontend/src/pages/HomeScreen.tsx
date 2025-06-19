@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Socket } from "socket.io-client";
-import { useUser } from "../context/UserContext";
+import { socket } from "../socket";
 
-export default function HomeScreen({ socket }: { socket: Socket }) {
-  const { setUsername } = useUser();
+export default function HomeScreen() {
   const [usernameInput, setUsernameInput] = useState("");
   const [room, setRoom] = useState("");
   const [newRoom, setNewRoom] = useState("");
@@ -28,17 +26,25 @@ export default function HomeScreen({ socket }: { socket: Socket }) {
     alert("Please enter username and room");
     return;
   }
+  if (exists){
+    socket.emit("check-room-exists", {room}, (response: {exists: boolean}) => {
+      if (!response.exists){
+        alert("This room does exist. Try again.");
+        return;
+      }
+    });
+  }
 
-  setUsername(usernameInput);
-  socket.emit("joinRoom", { username: usernameInput, room, exists });
-  navigate(`/chat/${room}`);
+  sessionStorage.setItem("username", usernameInput);
+  sessionStorage.setItem("room", room);
+  navigate(`/chat`);
 }
 
 
   return (
   <div className="h-screen flex flex-col items-center pt-48">
     <div className="flex flex-col pb-12 border-b mb-12 gap-4 items-center">
-      <div className="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">Chattr</div>
+      <div className="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-700">Chattr</div>
       <div className="text-3xl">A minimal real-time group chat application</div>
     </div>
     <div className="w-full max-w-xl p-6 bg-white shadow-xl rounded-xl">
@@ -75,7 +81,7 @@ export default function HomeScreen({ socket }: { socket: Socket }) {
           />
           <button
             onClick={() => handleJoin(room, true)}
-            className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
+            className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition cursor-pointer"
           >
             Join
           </button>
@@ -93,7 +99,7 @@ export default function HomeScreen({ socket }: { socket: Socket }) {
               setShowNewRoom(true);
               socket.emit("generateRoom", {});
             }}
-            className="px-4 py-2 bg-pink-400 text-white rounded-md hover:bg-pink-500 transition"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-purple-700 transition cursor-pointer"
           >
             Generate
           </button>
@@ -110,7 +116,7 @@ export default function HomeScreen({ socket }: { socket: Socket }) {
 
           <button
             onClick={() => handleJoin(newRoom, false)}
-            className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
+            className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition cursor-pointer"
           >
             Go
           </button>

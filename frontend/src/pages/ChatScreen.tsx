@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import MyMessageBubble from "../components/MyMessageBubble";
 import SystemMessage from "../components/SystemMessage";
 import OtherMessageBubble from "../components/OtherMessageBubble";
-import type { Socket } from "socket.io-client";
-import { useParams } from "react-router-dom";
-import { useUser } from "../context/UserContext";
+import { socket } from "../socket";
 
-export default function ChatScreen({ socket }: { socket: Socket }) {
-  const { room } = useParams();
-  const { username } = useUser();
+export default function ChatScreen() {
+  const room = sessionStorage.getItem("room");
+  const username = sessionStorage.getItem("username");
   const [messages, setMessages] = useState<{ user: string; msg: string }[]>([]);
   const [msg, setMsg] = useState("");
   const [members, setMembers] = useState([]);
@@ -23,6 +21,8 @@ export default function ChatScreen({ socket }: { socket: Socket }) {
   };
 
   useEffect(() => {
+    socket.emit("joinRoom", { username, room, exists: true });
+
     socket.emit("get-members", { room });
 
     socket.on("message", ({ user, msg }) => {
@@ -34,10 +34,6 @@ export default function ChatScreen({ socket }: { socket: Socket }) {
       console.log("received memebers: ", members);
       setMembers(members);
     });
-
-    return () => {
-      socket.emit("disconnecting");
-    };
   }, []);
 
   function sendMessage() {
@@ -83,7 +79,7 @@ export default function ChatScreen({ socket }: { socket: Socket }) {
           </span>
           <button
             onClick={handleCopy}
-            className="text-blue-600 underline hover:text-blue-800 text-xs"
+            className="text-blue-600 underline hover:text-blue-800 text-xs cursor-pointer"
           >
             {copied ? "Copied!" : "Copy"}
           </button>
@@ -123,7 +119,7 @@ export default function ChatScreen({ socket }: { socket: Socket }) {
         />
         <button
           onClick={sendMessage}
-          className="bg-blue-600 text-white px-4 mb-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow"
+          className="bg-blue-600 text-white px-4 mb-4 py-1.5 rounded-md hover:bg-blue-700 transition shadow cursor-pointer"
         >
           Send
         </button>

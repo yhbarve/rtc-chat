@@ -97,6 +97,13 @@ io.on("connection", (socket) => {
     createdRooms.add(newRoom);
     socket.emit("generatedNewRoom", { msg: newRoom });
   });
+
+  // check if room exists
+  socket.on("check-room-exists", ({room}, callback) => {
+    const exists = io.sockets.adapter.rooms.has(room);
+    callback({exists});
+  });
+  
 });
 
 const PORT = 8080;
