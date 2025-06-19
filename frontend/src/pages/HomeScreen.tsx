@@ -36,8 +36,12 @@ export default function HomeScreen({ socket }: { socket: Socket }) {
 
 
   return (
-  <div className="h-screen flex items-center justify-center">
-    <div className="w-full max-w-md p-6 bg-white shadow-xl rounded-xl">
+  <div className="h-screen flex flex-col items-center pt-48">
+    <div className="flex flex-col pb-12 border-b mb-12 gap-4 items-center">
+      <div className="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">Chattr</div>
+      <div className="text-3xl">A minimal real-time group chat application</div>
+    </div>
+    <div className="w-full max-w-xl p-6 bg-white shadow-xl rounded-xl">
       <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
         Join the Chattr
       </h1>
